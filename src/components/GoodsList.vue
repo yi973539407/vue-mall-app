@@ -67,6 +67,7 @@ export default {
       this.isLoading = true;
       this.finished = false;
       this.loading = false;
+      this.page = 1;
       this.resetGoodsList();
       this.getGoodsList({
         page: this.page, sortType: this.type,

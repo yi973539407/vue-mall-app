@@ -28,12 +28,15 @@ import { mapMutations } from 'vuex';
 import Animate from '@/tools/animate/index';
 
 export default {
-  props: ['tags', 'images', 'price', 'title', 'desc', 'id', 'num'],
+  props: ['tags', 'images', 'price', 'title', 'desc', 'id', 'num', 'nofly'],
   methods: {
     ...mapMutations(['storageChange']),
     counter(id, num) {
       this.storageChange({ id, value: num });
       if (num === -1) {
+        return;
+      }
+      if (this.nofly) {
         return;
       }
       // 图片位置

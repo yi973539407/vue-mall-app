@@ -1,7 +1,7 @@
 <template >
   <div class="search-wrapper">
     <div class="search-head">
-      <van-icon name="arrow-left" class="arr-left" />
+      <van-icon name="arrow-left" class="arr-left" @click="$router. goback()" />
       <van-search
         class="search-content"
         v-model="value"
@@ -18,6 +18,7 @@
         </template>
         <template #action v-else>
           <van-icon name='cart-o' id="shop-Car" class='shop-car'
+          @click="$router.push('/Home/Shopping')"
           :badge="badge" />
         </template>
       </van-search>
@@ -49,11 +50,15 @@
         :num = "counterMap[item.id]"/>
         </van-list>
     </div>
+    <div class="history" v-if="likeList.length<=0 && showList">
+      <MyHisroty :searchList='searchList' @search="onSearch" />
+    </div>
   </div>
 </template>
 
 <script>
 import GoodsCard from '@/components/GoodsCard.vue';
+import MyHisroty from '@/components/MyHistory.vue';
 import { mapState } from 'vuex';
 
 export default {
@@ -70,6 +75,7 @@ export default {
       goodsList: [],
       showList: true,
       total: 0,
+      searchList: [],
     };
   },
   computed: {
@@ -86,6 +92,10 @@ export default {
   },
   components: {
     GoodsCard,
+    MyHisroty,
+  },
+  created() {
+    this.searchList = JSON.parse(localStorage.getItem('searchList')) || [];
   },
   methods: {
 
@@ -95,6 +105,18 @@ export default {
       } else {
         this.value = this.place;
       }
+      const result = this.searchList.find((item) => item.value === this.value);
+      if (result) {
+        result.time = new Date().getTime();
+        this.searchList.sort((a, b) => b.time - a.time);
+      } else {
+        this.searchList.unshift({ value: this.value, time: new Date().getTime() });
+        if (this.searchList.length > 11) {
+          this.searchList.pop();
+        }
+      }
+      localStorage.setItem('searchList', JSON.stringify(this.searchList));
+
       this.likeList = [];
       this.goodsList = [];
       this.page = 1;
@@ -182,6 +204,13 @@ export default {
     margin:48px auto 0px;
     z-index: 10;
     background: #fff;
+  }
+  .history {
+    width:350px;
+    position: absolute;
+    top:10px;
+    left:10px;
+    z-index: 1;
   }
 }
 </style>

@@ -5,4 +5,5 @@ export const URLS = {
   getList: '/getGoodsList',
   search: '/search',
   likeSearch: '/likeSearch',
+  getGoodsByIds: '/getGoodsByIds',
 };

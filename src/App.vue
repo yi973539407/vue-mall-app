@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <transition :name="transitionName" :mode ="this.$router.back ? 'out-in' : 'in-out' ">
+      <router-view class="view"></router-view>
+    </transition>
+
   </div>
 </template>
 
@@ -10,6 +13,24 @@ export default {
   created() {
     const counterMap = JSON.parse(localStorage.getItem('goodsnum')) || {};
     this.$store.commit('setcounterMap', counterMap);
+  },
+  data() {
+    return {
+      transitionName: 'left',
+    };
+  },
+  watch: {
+    $router(to, from) {
+      if (to.name === 'Classify' && from.name === 'Search') {
+        this.$router.back = true;
+      }
+      if (this.$router.back) {
+        this.transitionName = 'right';
+      } else {
+        this.transitionName = 'left';
+      }
+      this.$router.back = false;
+    },
   },
 };
 </script>
@@ -23,4 +44,17 @@ export default {
   width:375px;
   height: 100px;
 }
+.view {
+  position: absolute;
+  left:0;
+  top:0;
+  width:100%;
+  transition:transform 0.2s linear;
+}
+  .left-enter{
+    transform: translate(100%,0);
+  }
+  .right-leave-to{
+    transform: translate(100%,0);
+  }
 </style>

@@ -37,9 +37,17 @@ const likeSearch = (value) => request.get(
     params: { likeValue: value },
   },
 );
+
+const getGoodsByIds = (value) => request.get(
+  URLS.getGoodsByIds,
+  {
+    params: { value },
+  },
+);
 export default {
   getSideList,
   getGoodsList,
   search,
   likeSearch,
+  getGoodsByIds,
 };

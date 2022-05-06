@@ -1,6 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+VueRouter.prototype.back = false;
+VueRouter.prototype.goback = function goback() {
+  this.back = true;
+  this.go(-1);
+};
 Vue.use(VueRouter);
 
 const routes = [
@@ -10,6 +15,7 @@ const routes = [
     children: [
       {
         path: 'Classify',
+        name: 'Classify',
         component: () => import('@/views/Classify.vue'),
       },
       {
@@ -24,11 +30,12 @@ const routes = [
   },
   {
     path: '/Search',
+    name: 'Search',
     component: () => import('@/views/Search.vue'),
   },
   {
     path: '*',
-    redirect: '/Home/',
+    redirect: '/Home/Classify',
   },
 ];
 
